@@ -69,10 +69,14 @@ class Encoder(nn.Module):
         enc_slf_attn_list = []
 
         # -- Forward
+        # 获取每一个word的初始特征
         enc_output = self.src_word_emb(src_seq)
+        # 增长特征的值
         if self.scale_emb:
             enc_output *= self.d_model ** 0.5
+        # 获取位置特征，并对特征做dropout，提升泛化性
         enc_output = self.dropout(self.position_enc(enc_output))
+        # 在每一个样本内做归一化
         enc_output = self.layer_norm(enc_output)
 
         for enc_layer in self.layer_stack:
